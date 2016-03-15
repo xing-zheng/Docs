@@ -1,0 +1,12 @@
+﻿@model FormsIntro.ViewModels.RegisterViewModel
+
+<form p-controller="DemoRegistration" asp-action="Register" method="post">
+    Email:  <input asp-for="Email" /> <br>
+    <span asp-validation-for="Email"></span><br>
+    Password: <input asp-for="Password" /><br>
+    <span asp-validation-for="Password"></span><br>
+    <button type="submit">Log in</button>
+</form>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
