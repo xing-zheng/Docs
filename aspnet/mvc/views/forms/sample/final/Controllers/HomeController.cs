@@ -26,7 +26,7 @@ namespace FormsTH
             return View(model);
         }
 
-        public IActionResult IndexMS()
+        public IActionResult IndexMultiSelect()
         {
             var model = new CountryViewModelIEnumerable();
             return View(model);
@@ -34,7 +34,7 @@ namespace FormsTH
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IndexMS(CountryViewModelIEnumerable model)
+        public IActionResult IndexMultiSelect(CountryViewModelIEnumerable model)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +86,25 @@ namespace FormsTH
             {
                 string message = model.EnumCountry + " selected";
                 return RedirectToAction("IndexSuccess", new {id=message});
+            }
+
+            // If we got this far, something failed, redisplay form.
+            return View(model);
+        }
+
+        public IActionResult IndexEmpty()
+        {
+            return View(new CountryViewModelEmpty());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IndexEmpty(CountryViewModelEmpty model)
+        {
+            if (ModelState.IsValid)
+            {
+                string message = model.Country + " selected";
+                return RedirectToAction("IndexSuccess", new { id = message });
             }
 
             // If we got this far, something failed, redisplay form.

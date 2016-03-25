@@ -1,17 +1,13 @@
-﻿//#define EnumOnly
-#if EnumOnly
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace FormsTagHelper.ViewModels
+public enum CountryEnum
 {
-    public enum CountryEnum
-    {
-        Mexico,
-        USA,
-        Canada,
-        France,
-        Germany,
-        Spain
-    }
+    [Display(Name = "United Mexican States")]
+    Mexico,
+    [Display(Name = "United States of America")]
+    USA,
+    Canada,
+    France,
+    Germany,
+    Spain
 }
-
-#endif

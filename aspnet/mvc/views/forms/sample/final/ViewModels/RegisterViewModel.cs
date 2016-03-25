@@ -1,7 +1,4 @@
-﻿//#define working
-#if working
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FormsTagHelper.ViewModels
 {
@@ -9,6 +6,7 @@ namespace FormsTagHelper.ViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "Email Address")]
         public string Email { get; set; }
 
         [Required]
@@ -16,4 +14,3 @@ namespace FormsTagHelper.ViewModels
         public string Password { get; set; }
     }
 }
-#endif

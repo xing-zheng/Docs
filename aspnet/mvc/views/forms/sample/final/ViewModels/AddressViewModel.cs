@@ -7,7 +7,7 @@ namespace FormsTagHelper.ViewModels
         public string AddressLine1 { get; set; }
     }
 
-    public class RegisterViewModel2
+    public class RegisterAddressViewModel
     {
         public string Email { get; set; }
         [DataType(DataType.Password)]

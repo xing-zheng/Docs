@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-namespace FormsTagHelper.ViewModels
+public class SimpleViewModel
 {
-    public class SimpleViewModel
-    {
-        [MaxLength(5000), MinLength(10), Required]
-        public string Description { get; set; }
-    }
+    [Required, EmailAddress]
+    [Display(Name = "Email Address")]
+    public string Email { get; set; }
 }
+
