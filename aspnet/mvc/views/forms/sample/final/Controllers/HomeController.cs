@@ -110,6 +110,7 @@ namespace FormsTH
             // If we got this far, something failed, redisplay form.
             return View(model);
         }
+
         public IActionResult IndexSuccess(string ID)
         {
             ViewData["Message"] = ID;

@@ -1,9 +1,9 @@
-﻿using FormsTagHelper.ViewModels;
-using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNet.Mvc;
 
 namespace FormsTagHelper.Controllers
 {
     // This controller is used only to demonstrate working with forms.
+
     public class DemoController : Controller
     {       
         
@@ -30,6 +30,7 @@ namespace FormsTagHelper.Controllers
 
             return View(model);
         }
+
         public IActionResult RegisterFormOnly()
         {
             return View();
