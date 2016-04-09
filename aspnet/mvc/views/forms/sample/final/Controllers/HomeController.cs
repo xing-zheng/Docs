@@ -1,7 +1,7 @@
 ﻿using FormsTagHelper.ViewModels;
 using Microsoft.AspNet.Mvc;
 
-namespace FormsTH
+namespace FormsTagHelper.Controllers
 {
     public class HomeController : Controller
     {
@@ -18,11 +18,11 @@ namespace FormsTH
         {
             if (ModelState.IsValid)
             {
-                string message = model.Country +  " selected";
+                var message = model.Country +  " selected";
                 return RedirectToAction("IndexSuccess", new {id=message});
             }
 
-            // If we got this far, something failed, redisplay form.
+            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
@@ -46,14 +46,14 @@ namespace FormsTH
                 return RedirectToAction("IndexSuccess", new { id = strCountriesSelected });
             }
 
-            // If we got this far, something failed, redisplay form.
+            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
         public IActionResult IndexGroup()
         {
             var model = new CountryViewModelGroup();
-           // model.Country = "FR";
+
             return View(model);
         }
 
@@ -63,11 +63,11 @@ namespace FormsTH
         {
             if (ModelState.IsValid)
             {
-                string message = model.Country + " selected";
+                var message = model.Country + " selected";
                 return RedirectToAction("IndexSuccess", new {id=message});
             }
 
-            // If we got this far, something failed, redisplay form.
+            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
@@ -84,11 +84,11 @@ namespace FormsTH
         {
             if (ModelState.IsValid)
             {
-                string message = model.EnumCountry + " selected";
+                var message = model.EnumCountry + " selected";
                 return RedirectToAction("IndexSuccess", new {id=message});
             }
 
-            // If we got this far, something failed, redisplay form.
+            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
@@ -103,11 +103,11 @@ namespace FormsTH
         {
             if (ModelState.IsValid)
             {
-                string message = model.Country + " selected";
+                var message = model.Country + " selected";
                 return RedirectToAction("IndexSuccess", new { id = message });
             }
 
-            // If we got this far, something failed, redisplay form.
+            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 

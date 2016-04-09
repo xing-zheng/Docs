@@ -7,9 +7,9 @@ namespace FormsTagHelper.Controllers
     public class DemoController : Controller
     {       
         
-        public IActionResult Index(string ID)
+        public IActionResult Index(string id)
         {
-            ViewData["Message"] = ID;
+            ViewData["Message"] = id;
             return View();
         }
 
@@ -24,7 +24,7 @@ namespace FormsTagHelper.Controllers
         {
             if (ModelState.IsValid)
             {
-                string success = "HttpPost Register success " + model.Description;
+                var success = "HttpPost Register success " + model.Description;
                 return RedirectToAction("Index", new { id = success });
             }
 

@@ -196,11 +196,51 @@ The following HTML is generated:
     <button type="submit">Test</button>
     <input name="__RequestVerificationToken" type="hidden" value="<removed for brevity>" />
   </form>
-  
-The Validation Tag Helper
+
+The Label Tag Helper
+--------------------
+
+The `Label Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/LabelTagHelper/index.html>`__ generates the label caption and ``for=`` attribute on a `<label> <https://www.w3.org/wiki/HTML/Elements/label>`__ element for a property on the model. HTML Helper alternative: ``Html.LabelFor``.
+
+Consider the following ``SimpleViewModel`` and Razor view:
+
+.. literalinclude::  forms/sample/final/ViewModels/SimpleViewModel.cs
+  :language: c#
+
+..  literalinclude::  forms/sample/final/Views/Demo/RegisterLabel.cshtml
+  :language: HTML
+  :emphasize-lines: 4
+
+The following HTML is generated for the ``<label>`` element:
+
+.. code-block:: HTML
+
+ <label for="Email">Email Address</label>  
+ 
+The Label Tag Helper generated the ``for`` attribute value of "Email", which is the name of the property. The caption comes from the ``Display`` attribute. The Label Tag Helper provides the following benefits over a pure HTML label element:
+
+- You automatically get the descriptive label value from the ``Display`` attribute. The intended display name might change over time, and the combination of ``Display`` attribute and Label Tag Helper will apply the ``Display`` everywhere it's used.
+- Less markup in source code
+- Strong typing with the model property. If the name of the property changes you'll get an error similar to the following:
+
+.. code-block:: HTML
+
+     An error occurred during the compilation of a resource required to process
+     this request. Please review the following specific error details and modify
+     your source code appropriately.
+    
+     Type expected
+      'SimpleViewModel' does not contain a definition for 'Email' and no
+      extension method 'Email' accepting a first argument of type 'SimpleViewModel'
+      could be found (are you missing a using directive or an assembly reference?)
+
+The Validation Tag Helpers
 ---------------------------
 
 There are two Validation Tag Helpers. The `Validation Message Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/ValidationMessageTagHelper/index.html>`__ (which displays a validation message for a single property on your model), and the `Validation Summary Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/ValidationSummaryTagHelper/index.html>`__ (which displays a summary of validation errors). The `Input Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/InputTagHelper/index.html>`__ adds HTML5 client side validation attributes to input elements based on data annotation attributes on your model classes. The Validation Tag Helper displays these error messages when a validation error occurs. 
+
+The Validation Message Tag Helper
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The `Validation Message Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/ValidationMessageTagHelper/index.html>`__  is used with the ``asp-validation-for`` attribute on a HTML `span <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/span>`__ element.
 
@@ -224,7 +264,10 @@ You generally use the `Validation Message Tag Helper <https://docs.asp.net/proje
  script references in place for client side validation. See :doc:`/mvc/models/validation` for more information.
  
 The HTML Helper `@Html.ValidationMessageFor <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/Rendering/HtmlHelperValidationExtensions/index.html>`__ provides an alternative to this Tag Helper.
-  
+
+The Validation Summary Tag Helper
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The `Validation Summary Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/ValidationSummaryTagHelper/index.html>`__  is used to display a summary of validation messages. The `asp-validation-summary`` attribute value can be any of the following:
 
 +-------------------------------+--------------------------------+
@@ -274,45 +317,6 @@ The generated HTML:
     <button type="submit">Register</button>
     <input name="__RequestVerificationToken" type="hidden" value="<removed for brevity>" />
   </form>
-
-
-The Label Tag Helper
---------------------
-
-The `Label Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/LabelTagHelper/index.html>`__ generates the label caption and ``for=`` attribute on a `<label> <https://www.w3.org/wiki/HTML/Elements/label>`__ element for a property on the model. HTML Helper alternative: ``Html.LabelFor``.
-
-Consider the following ``SimpleViewModel`` and Razor view:
-
-.. literalinclude::  forms/sample/final/ViewModels/SimpleViewModel.cs
-  :language: c#
-
-..  literalinclude::  forms/sample/final/Views/Demo/RegisterLabel.cshtml
-  :language: HTML
-  :emphasize-lines: 4
-
-The following HTML is generated for the ``<label>`` element:
-
-.. code-block:: HTML
-
- <label for="Email">Email Address</label>  
- 
-The Label Tag Helper generated the ``for`` attribute value of "Email", which is the name of the property. The caption comes from the ``Display`` attribute. The Label Tag Helper provides the following benefits over a pure HTML label element:
-
-- You automatically get the descriptive label value from the ``Display`` attribute. The intended display name might change over time, and the combination of ``Display`` attribute and Label Tag Helper will apply the ``Display`` everywhere it's used.
-- Less markup in source code
-- Strong typing with the model property. If the name of the property changes you'll get an error similar to the following:
-
-.. code-block:: HTML
-
-     An error occurred during the compilation of a resource required to process
-     this request. Please review the following specific error details and modify
-     your source code appropriately.
-    
-     Type expected
-      'SimpleViewModel' does not contain a definition for 'Email' and no
-      extension method 'Email' accepting a first argument of type 'SimpleViewModel'
-      could be found (are you missing a using directive or an assembly reference?)
-
 
 The Select Tag Helper
 -------------------------
@@ -460,7 +464,7 @@ Generates the following HTML:
   </form>
 
 No selection
----------------------
+^^^^^^^^^^^^^^
 
 To allow for no selection, you can add a ``SelectListItem`` to represent no selection. If the property is a `value type <https://msdn.microsoft.com/en-us/library/s1ax56ch.aspx>`__, you'll have to make it `nullable <https://msdn.microsoft.com/en-us/library/2cf62fcy.aspx>`__. The following model includes a null selection:
 
