@@ -46,7 +46,6 @@ namespace FormsTagHelper.Controllers
                 return RedirectToAction("IndexSuccess", new { id = strCountriesSelected });
             }
 
-            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
@@ -67,7 +66,6 @@ namespace FormsTagHelper.Controllers
                 return RedirectToAction("IndexSuccess", new {id=message});
             }
 
-            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
@@ -88,32 +86,34 @@ namespace FormsTagHelper.Controllers
                 return RedirectToAction("IndexSuccess", new {id=message});
             }
 
-            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
-        public IActionResult IndexEmpty()
+        public IActionResult IndexEmpty(int id)
         {
-            return View(new CountryViewModelEmpty());
+            var ViewPage = (id != 0) ? "IndexEmptyTemplate" : "IndexEmpty";
+
+            return View(ViewPage, new CountryViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult IndexEmpty(CountryViewModelEmpty model)
+        public IActionResult IndexEmpty(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var message = model.Country + " selected";
+                var message = !System.String.IsNullOrEmpty(model.Country) ? model.Country
+                    : "No slection";
+                message += " Selected";
                 return RedirectToAction("IndexSuccess", new { id = message });
             }
 
-            // If we got this far, something failed; redisplay form.
             return View(model);
         }
 
-        public IActionResult IndexSuccess(string ID)
+        public IActionResult IndexSuccess(string id)
         {
-            ViewData["Message"] = ID;
+            ViewData["Message"] = id;
             return View();
         }
     }

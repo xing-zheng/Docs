@@ -51,6 +51,19 @@ namespace FormsTagHelper.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RegisterValidation(ViewModels.RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var success = "HttpPost Register success " + model.Email;
+                return RedirectToAction("Index", new { id = success });
+            }
+
+            return View(model);
+        }
+
         public IActionResult RegisterLabel()
         {
             return View();
