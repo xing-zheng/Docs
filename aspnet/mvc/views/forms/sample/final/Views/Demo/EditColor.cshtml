@@ -4,14 +4,8 @@
 }
 
 <form asp-controller="ToDo" asp-action="Edit" method="post">
-    @*
-        Move the following two lines to a template to avoid
-        evaluating index twice.
-        <label asp-for="Colors[index]" />
-        <input asp-for="Colors[index]" /> <br />
-    *@
     @Html.EditorFor(m => m.Colors[index])
-    <label asp-for="Age" />
+    <label asp-for="Age"></label>
     <input asp-for="Age" /><br />
     <button type="submit">Post</button>
 </form>

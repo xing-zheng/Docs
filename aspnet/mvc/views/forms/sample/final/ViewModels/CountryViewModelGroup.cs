@@ -5,8 +5,6 @@ namespace FormsTagHelper.ViewModels
 {
     public class CountryViewModelGroup
     {
-        public string Country { get; set; }
-
         public CountryViewModelGroup()
         {
             var NorthAmericaGroup = new SelectListGroup { Name = "North America" };
@@ -52,6 +50,9 @@ namespace FormsTagHelper.ViewModels
                 }
           };
         }
-        public List<SelectListItem> Countries { get; private set; }
+
+        public string Country { get; set; }
+
+        public List<SelectListItem> Countries { get; }
     }
 }

@@ -18,8 +18,8 @@ namespace FormsTagHelper.Controllers
         {
             if (ModelState.IsValid)
             {
-                var message = model.Country +  " selected";
-                return RedirectToAction("IndexSuccess", new {id=message});
+                var msg = model.Country +  " selected";
+                return RedirectToAction("IndexSuccess", new { message = msg});
             }
 
             // If we got this far, something failed; redisplay form.
@@ -43,7 +43,7 @@ namespace FormsTagHelper.Controllers
                 {
                     strCountriesSelected = strCountriesSelected + " " + s;
                 }
-                return RedirectToAction("IndexSuccess", new { id = strCountriesSelected });
+                return RedirectToAction("IndexSuccess", new { message = strCountriesSelected });
             }
 
             return View(model);
@@ -62,8 +62,8 @@ namespace FormsTagHelper.Controllers
         {
             if (ModelState.IsValid)
             {
-                var message = model.Country + " selected";
-                return RedirectToAction("IndexSuccess", new {id=message});
+                var msg = model.Country + " selected";
+                return RedirectToAction("IndexSuccess", new { message = msg});
             }
 
             return View(model);
@@ -82,8 +82,8 @@ namespace FormsTagHelper.Controllers
         {
             if (ModelState.IsValid)
             {
-                var message = model.EnumCountry + " selected";
-                return RedirectToAction("IndexSuccess", new {id=message});
+                var msg = model.EnumCountry + " selected";
+                return RedirectToAction("IndexSuccess", new { message = msg});
             }
 
             return View(model);
@@ -102,18 +102,18 @@ namespace FormsTagHelper.Controllers
         {
             if (ModelState.IsValid)
             {
-                var message = !System.String.IsNullOrEmpty(model.Country) ? model.Country
+                var msg = !System.String.IsNullOrEmpty(model.Country) ? model.Country
                     : "No slection";
-                message += " Selected";
-                return RedirectToAction("IndexSuccess", new { id = message });
+                msg += " Selected";
+                return RedirectToAction("IndexSuccess", new { message = msg });
             }
 
             return View(model);
         }
 
-        public IActionResult IndexSuccess(string id)
+        public IActionResult IndexSuccess(string message)
         {
-            ViewData["Message"] = id;
+            ViewData["Message"] = message;
             return View();
         }
     }
