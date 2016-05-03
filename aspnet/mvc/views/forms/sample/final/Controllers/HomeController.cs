@@ -111,6 +111,18 @@ namespace FormsTagHelper.Controllers
             return View(model);
         }
 
+        public IActionResult IndexOption(int id)
+        {
+            var model = new CountryViewModel();
+            model.Country = "CA";
+            return View(model);
+        }
+
+        public IActionResult MyModel()
+        {
+            return View();
+        }
+
         public IActionResult IndexSuccess(string message)
         {
             ViewData["Message"] = message;

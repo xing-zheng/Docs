@@ -20,7 +20,7 @@ The `Form <https://www.w3.org/TR/html401/interact/forms.html>`__ Tag Helper:
 - Generates the HTML `<FORM> <https://www.w3.org/TR/html401/interact/forms.html>`__ ``action`` attribute value for a MVC controller action or named route
 - Generates a hidden `Request Verification Token <http://www.asp.net/mvc/overview/security/xsrfcsrf-prevention-in-aspnet-mvc-and-web-pages>`__ to prevent cross-site request forgery (when used with the ``[ValidateAntiForgeryToken]`` attribute in the HTTP Post action method)
 - Provides the ``asp-route-<Parameter Name>`` attribute, where ``<Parameter Name>`` is added to the route values. The  ``routeValues`` parameter to ``Html.BeginForm`` and ``Html.BeginRouteForm`` provide similar functionality.  
-- Has an HTML Helper alternative ``Html.BeginForm`` and Html.BeginRouteForm
+- Has an HTML Helper alternative ``Html.BeginForm`` and ``Html.BeginRouteForm``
 
 Sample:
 
@@ -39,8 +39,6 @@ The Form Tag Helper above generates the following HTML:
 The MVC runtime generates the ``action`` attribute value from the Form Tag Helper attributes ``asp-controller`` and ``asp-action``. The Form Tag Helper also generates a hidden `Request Verification Token <http://www.asp.net/mvc/overview/security/xsrfcsrf-prevention-in-aspnet-mvc-and-web-pages>`__ to prevent cross-site request forgery (when used with the ``[ValidateAntiForgeryToken]`` attribute in the HTTP Post action method). Protecting a pure HTML Form from cross-site request forgery is very difficult, the Form Tag Helper provides this service for you.
 
 Many of the views in the  *Views/Account* folder (generated when you create a new web app with *Individual User Accounts*) contain the `asp-route-returnurl <http://docs.asp.net/en/latest/mvc/views/working-with-forms.html#the-form-tag-helper>`__ attribute: 
-
-
 
 .. code-block:: HTML
   :emphasize-lines: 2
@@ -180,6 +178,17 @@ Generates the following:
   
     <input type="text" id="joe" name="joe" value="Joe" />
 
+Properties and variables named "model" or "Model" (case-insensitive) are special-cased at the left end of the expression. For example:
+
+.. literalinclude::   forms/sample/final/Views/Home/MyModel.cshtml
+  :language: HTML
+
+Generates the following HTML:
+
+.. code-block:: HTML
+
+   <input type="text" id="Name" name="Name" value="" />
+
 Navigating child properties 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -284,7 +293,6 @@ The following HTML is generated:
 
 .. code-block:: HTML  
   :emphasize-lines: 2-8
-  :linenos:
 
   <form method="post" action="/Demo/RegisterTextArea">
     <textarea data-val="true" 
@@ -336,7 +344,7 @@ The Validation Message Tag Helper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Adds the `HTML5 <https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5>`__  ``data-valmsg-for="property"`` attribute to the `span <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/span>`__ element, which attaches the validation error messages on the input field of the specified model property. When a client side validation error occurs, `jQuery <https://jquery.com/>`__ displays the error message in the ``<span>`` element. 
-- Validation also takes place on the server. Clients may bave JavaScript disabled and some validation can only be done on the server side.
+- Validation also takes place on the server. Clients may have JavaScript disabled and some validation can only be done on the server side.
 - HTML Helper alternative: `@Html.ValidationMessageFor <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/Rendering/HtmlHelperValidationExtensions/index.html>`__ 
 
 The `Validation Message Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/AspNet/Mvc/TagHelpers/ValidationMessageTagHelper/index.html>`__  is used with the ``asp-validation-for`` attribute on a HTML `span <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/span>`__ element.
@@ -402,7 +410,6 @@ The generated HTML (when the model is valid):
 
 .. code-block:: HTML
   :emphasize-lines: 2,3,8,9,12,13
-  :linenos:
   
   <form action="/DemoReg/Register" method="post">
     <div class="validation-summary-valid" data-valmsg-summary="true">
@@ -434,7 +441,7 @@ The `Select Tag Helper <https://docs.asp.net/projects/api/en/latest/autoapi/Micr
   :lines: 4
   :dedent: 3
   
-Consider the following view model:
+Sample:
 
 .. literalinclude::  forms/sample/final/ViewModels/CountryViewModel.cs
   :language: c#
@@ -459,7 +466,7 @@ The ``Index`` view:
   :language: HTML
   :emphasize-lines: 4
   
-Which generates the following HTML:
+Which generates the following HTML (with "CA" selected):
 
 .. code-block:: HTML  
   :emphasize-lines: 2-6 
@@ -481,8 +488,8 @@ The ``asp-for`` attribute value is a special case and doesn't require a ``Model`
 .. literalinclude::   forms/sample/final/Views/Home/Index.cshtml
   :language: HTML
   :lines: 4
-  :dedent: 3
-  
+  :dedent: 3  
+ 
 Enum binding
 ^^^^^^^^^^^^^^
 
@@ -587,7 +594,6 @@ With the following view:
 Generates the following HTML:
 
 .. code-block:: HTML  
-  :linenos:
   :emphasize-lines: 3
 
   <form method="post" action="/Home/IndexMultiSelect">
@@ -624,7 +630,32 @@ The *Views/Shared/EditorTemplates/CountryViewModel.cshtml* template:
 .. literalinclude::   forms/sample/final/Views/Shared/EditorTemplates/CountryViewModel.cshtml
   :language: HTML
 
-  
+Adding HTML `<option> <https://www.w3.org/wiki/HTML/Elements/option>`__ elements is not limited to the *No selection* case. For example, the following view and action method will generate HTML similar to the code above:
+
+.. literalinclude:: forms/sample/final/Controllers/HomeController.cs
+  :language: c#
+  :lines: 114-119
+  :dedent: 6
+
+.. literalinclude::   forms/sample/final/Views/Home/IndexOption.cshtml
+  :language: HTML
+ 
+The correct ``<option>`` element will be selected ( contain the ``selected="selected"`` attribute) depending on the current ``Country`` value. 
+
+.. code-block:: HTML 
+  :emphasize-lines: 5
+
+   <form method="post" action="/Home/IndexEmpty">
+       <select id="Country" name="Country">
+           <option value="">&lt;none&gt;</option>
+           <option value="MX">Mexico</option>
+           <option value="CA" selected="selected">Canada</option>
+           <option value="US">USA</option>
+       </select>
+       <br /><button type="submit">Register</button>
+    <input name="__RequestVerificationToken" type="hidden" value="<removed for brevity>" />
+  </form>
+
 Additional Resources
 ---------------------
 
