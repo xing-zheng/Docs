@@ -41,6 +41,7 @@ The MVC runtime generates the ``action`` attribute value from the Form Tag Helpe
 Many of the views in the  *Views/Account* folder (generated when you create a new web app with *Individual User Accounts*) contain the `asp-route-returnurl <http://docs.asp.net/en/latest/mvc/views/working-with-forms.html#the-form-tag-helper>`__ attribute: 
 
 .. code-block:: HTML
+
   :emphasize-lines: 2
   
   <form asp-controller="Account" asp-action="Login" 
@@ -178,19 +179,9 @@ Generates the following:
   
     <input type="text" id="joe" name="joe" value="Joe" />
 
-Properties and variables named "model" or "Model" (case-insensitive) are special-cased at the left end of the expression. For example:
-
-.. literalinclude::   forms/sample/final/Views/Home/MyModel.cshtml
-  :language: HTML
-
-Generates the following HTML:
-
-.. code-block:: HTML
-
-   <input type="text" id="Name" name="Name" value="" />
 
 Navigating child properties 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can also navigate to child properties using the property path of the view model. Consider a more complex model class that contains a child ``Address`` property.
 
