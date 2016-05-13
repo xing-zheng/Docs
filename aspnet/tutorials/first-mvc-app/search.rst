@@ -88,7 +88,8 @@ However, you can't expect users to modify the URL every time they want to search
 
 .. Index.cshtml is never referenced in the .rst files and is used only to test the code. 
   Copy the relevant IndexXXX.cshtml file to Index.cshtml and test. 
-  Open the *Views/Movies/Index.cshtml* file, and add the ``<form>`` markup highlighted below: 
+
+Open the *Views/Movies/Index.cshtml* file, and add the ``<form>`` markup highlighted below: 
 
 .. literalinclude:: start-mvc/sample/src/MvcMovie/Views/Movies/IndexForm1.cshtml
 	:language: HTML
