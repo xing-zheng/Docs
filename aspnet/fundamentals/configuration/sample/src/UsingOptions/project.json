@@ -1,31 +1,32 @@
 {
   "version": "1.0.0-*",
-  "compilationOptions": {
+  
+  "buildOptions": {
     "emitEntryPoint": true
   },
-
+  
   "dependencies": {
-    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final"
-  },
-
-  "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel"
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0-rc2-3002702"
+    },
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-20844",
+    "Microsoft.AspNetCore.Razor.Tools": {
+      "version": "1.0.0-rc2-20801",
+      "type": "build"
+    },
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-rc2-20844",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-rc2-20844",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-20844"
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
-  },
-
-  "exclude": [
-    "wwwroot",
-    "node_modules"
-  ],
-  "publishExclude": [
-    "**.user",
-    "**.vspscc"
-  ]
+     "netcoreapp1.0": {
+       "imports": [
+         "dotnet5.6",
+         "dnxcore50",
+         "portable-net45+win8"
+       ]
+     }
+  }
 }
