@@ -1,7 +1,6 @@
-﻿using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace CustomConfigurationProvider
+namespace CustomConfigurationSource
 {
     public class ConfigurationContext : DbContext
     {

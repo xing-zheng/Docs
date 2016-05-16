@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace CustomConfigurationProvider
+namespace CustomConfigurationSource
 {
     public class Program
     {
@@ -12,7 +12,6 @@ namespace CustomConfigurationProvider
             builder.AddJsonFile("appsettings.json");
             builder.AddEnvironmentVariables();
             var config = builder.Build();
-
             builder.AddEntityFramework(options => options.UseSqlServer(config["Data:DefaultConnection:ConnectionString"]));
             config = builder.Build();
 
