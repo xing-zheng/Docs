@@ -29,7 +29,7 @@ namespace UsingOptions
             services.AddOptions();
 
             // Configure MyOptions using config
-            //services.Configure<MyOptions>(Configuration);
+            services.Configure<MyOptions>(Configuration);
 
             // Configure MyOptions using code
             services.Configure<MyOptions>(myOptions =>
