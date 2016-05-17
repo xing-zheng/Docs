@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace CustomConfigurationSource
+namespace CustomConfigurationProvider
 {
     public class ConfigurationContext : DbContext
     {
@@ -9,6 +9,5 @@ namespace CustomConfigurationSource
         }
 
         public DbSet<ConfigurationValue> Values { get; set; }
-
     }
 }

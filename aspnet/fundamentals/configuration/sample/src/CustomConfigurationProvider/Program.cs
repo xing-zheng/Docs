@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace CustomConfigurationSource
+namespace CustomConfigurationProvider
 {
     public class Program
     {
