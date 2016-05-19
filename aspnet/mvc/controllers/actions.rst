@@ -68,7 +68,7 @@ Cross-Cutting Concerns
 
 In most apps, many actions will share parts of their workflow. For instance, most of an app might be available only to authenticated users, or might benefit from caching. When you want to perform some logic before or after an action method runs, you can use a `filter`. You can help keep your actions from growing too large by using :doc:`filters` to handle these cross-cutting concerns. This can help eliminate duplication within your actions, allowing them to follow the `Don't Repeat Yourself (DRY) principle <http://deviq.com/don-t-repeat-yourself/>`_.
 
-In the case of authorization and authentication, you can apply the ``Authorize`` attribute to any actions that require it. Adding it to a controller will apply it to all actions within that controller. Adding this attribute will ensure the appropriate filter is applied to any request for this action. Some attributes can be applied at both controller and action levels to provide granular control over filter behavior. Learn more: :doc:`filters` and :doc:`/security/authorization/authorization-filters`.
+In the case of authorization and authentication, you can apply the ``Authorize`` attribute to any actions that require it. Adding it to a controller will apply it to all actions within that controller. Adding this attribute will ensure the appropriate filter is applied to any request for this action. Some attributes can be applied at both controller and action levels to provide granular control over filter behavior. Learn more about :doc:`/security/authorization/index` and :ref:`Authorization Filters <authorization-filters>`.
 
 Other examples of cross-cutting concerns in MVC apps may include:
   * :ref:`Error handling <exception-filters>`

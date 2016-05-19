@@ -16,5 +16,4 @@ Client-Side Development
    bundling-and-minification
    cdn
    responsive-design
-   typescript
    yeoman
