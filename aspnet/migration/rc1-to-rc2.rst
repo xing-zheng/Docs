@@ -1,5 +1,5 @@
-Migrating from ASP.NET 5 RC1 to ASP.NET Core
-============================================
+Migrating from ASP.NET to ASP.NET Core
+======================================
 
 .. contents:: Sections:
   :local:
@@ -17,7 +17,7 @@ For information regarding a complete list of breaking changes in RC2 for ASP.NET
 Creating your web application host
 ----------------------------------
 
-Since ASP.NET Core apps are just console apps, you must define an entry point for your application in ``Program.Main`` that sets up a web host, then tells it to start listening. Below is an example of the startup code for the built-in `Web Application` template in Visual Studio.
+Since ASP.NET Core apps are just console apps, you must define an entry point for your application in ``Program.Main()`` that sets up a web host, then tells it to start listening. Below is an example of the startup code for the built-in `Web Application` template in Visual Studio.
 
 .. code-block:: c#
 
@@ -37,7 +37,7 @@ Since ASP.NET Core apps are just console apps, you must define an entry point fo
   }
 
 
-The web root of your application is no longer specified in your project.json file. It is instead defined when setting up the web host and defaults to wwwroot. Call the UseWebRoot method to specify a web root folder. Alternatively you can enable specifying the web root folder in configuration by calling the UseConfiguration method. Similarly the server URLs that your application listens on can be specified using the UseServerUrls method or through configuration.
+The web root of your application is no longer specified in your ``project.json`` file. It is instead defined when setting up the web host and defaults to wwwroot. Call the ``UseWebRoot()`` method to specify a web root folder. Alternatively you can enable specifying the web root folder in configuration by calling the ``UseConfiguration()`` method. Similarly the server URLs that your application listens on can be specified using the ``UseServerUrls()`` method or through configuration.
 
 Additionally, you must turn on server garbage collection in ``project.json`` or, ``app.config`` when running ASP.NET projects on the full .NET framework.
 
@@ -58,6 +58,8 @@ WebHostBuilder API updates
 All classes prefixed with WebApplication have been renamed to WebHost. This includes:
 
 ===========================    =========================
+RC1                            RC2
+===========================    =========================
 IWebApplicationBuilder         IWebHostBuilder
 WebApplicationBuilder          WebHostBuilder
 IWebApplication                IWebHost
@@ -76,15 +78,27 @@ IHostingEnvironment changes
 
 All environment variables are now prefixed with the ``ASPNETCORE_`` prefix.
 
-======================  ===========================
-Old prefix              New prefix
-======================  ===========================
-ASPNET\_WEBROOT         ASPNETCORE\_WEBROOT
-ASPNET\_SERVER          ASPNETCORE\_SERVER
-ASPNET\_APP             ASPNETCORE\_APPLICATIONNAME
-ASPNET\_ENVIRONMENT     ASPNETCORE\_ENVIRONMENT
-ASPNET\_DETAILEDERRORS  ASPNETCORE\_DETAILEDERRORS
-======================  ===========================
+===================================================  ===================================================  
+RC1                                                  RC2                           
+===================================================  ===================================================
+ASPNET_APP, ASPNET_APPLICATIONNAME, Hosting:App      ASPNETCORE_APP, ASPNETCORE_APPLICATIONNAME
+ASPNET_STARTUPASSEMBLY                               ASPNETCORE_STARTUPASSEMBLY
+ASPNET_DETAILEDERRORS, Hosting:DetailedErrors        ASPNETCORE_DETAILEDERRORS
+ASPNET_ENVIRONMENT, ASPNET_ENV, Hosting:Environment  ASPNETCORE_ENVIRONMENT, ASPNETCORE_ENV
+ASPNET_SERVER, Hosting:Server                        ASPNETCORE_SERVER
+ASPNET_WEBROOT, webroot                              ASPNETCORE_WEBROOT
+ASPNET_CAPTURESTARTUPERRORS                          ASPNETCORE_CAPTURESTARTUPERRORS
+ASPNET_SERVER.URLS                                   ASPNETCORE_SERVER.URLS
+ASPNET_CONTENTROOT, ASPNET_APPLICATIONBASE           ASPNETCORE_CONTENTROOT, ASPNETCORE_APPLICATIONBASE
+===================================================  ===================================================
+
+In RC2, you can use whatever prefix you want. You should add it explicitly by calling:
+
+.. code-block:: c#
+
+  new ConfigurationBuilder.AddEnvironmentVariables(“ANY_PREFIX_YOU_WANT_”).Build(); 
+  
+However, there is an exception. You must set the environment key using ``ASPNETCORE_ENVIRONMENT``. This is picked up by default by the ``WebHostBuilder``, unlike the other variables. 
 
 ASP.NET 5 was renamed to ASP.NET Core 1.0. Also, MVC and Identity are now part of ASP.NET Core. ASP.NET MVC 6 is now ASP.NET Core MVC. ASP.NET Identity 3 is now ASP.NET Core Identity.
 
@@ -105,7 +119,7 @@ Change:
   public Startup(IApplicationEnvironment applicationEnvironment)
   {
      var builder = new ConfigurationBuilder()
-       .SetBasePath(applicationEnvironment.ApplicationBasePath)
+       .SetBasePath(applicationEnvironment.ApplicationBasePath);
   }
 
 To: 
@@ -115,7 +129,7 @@ To:
   public Startup(IHostingEnvironment hostingEnvironment)
   {
      var builder = new ConfigurationBuilder()
-      .SetBasePath(hostingEnvironment.ContentRootPath)
+      .SetBasePath(hostingEnvironment.ContentRootPath);
   }
 
   
@@ -136,7 +150,7 @@ HttpPlatformModule
 
 ``Microsoft.AspNetCore.IISPlatformHandler`` is now ``Microsoft.AspNetCore.Server.IISIntegration``.
 
-HttpPlatformModule was replaced by ASP.NET Core Module. The web.config created by the Publish IIS tool now configures IIS to use ASP.NET Core Module instead of HttpPlatformHandler to reverse-proxy requests to Kestrel.
+HttpPlatformModule was replaced by ASP.NET Core Module. The ``web.config`` created by the Publish IIS tool now configures IIS to use ASP.NET Core Module instead of HttpPlatformHandler to reverse-proxy requests to Kestrel.
 
 The code snippet below shows how to configure the new Publish IIS tool in ``project.json`` file:
 
@@ -172,24 +186,34 @@ The ASP.NET Core Module must be configured in ``web.config``:
 The Publish IIS tool 
 ^^^^^^^^^^^^^^^^^^^^^
 
-The name of the package that contains the Publish IIS tool was changed to ``Microsoft.AspNetCore.Server.IISIntegration.Tools``. This requires changing your project.json file to inlude the ``Microsoft.AspNetCore.Server.IISIntegration.Tools`` package instead of the ``dotnet-publish-iis`` package.
+The name of the package that contains the Publish IIS tool was changed to ``Microsoft.AspNetCore.Server.IISIntegration.Tools``. This requires changing your ``project.json`` file to inlude the ``Microsoft.AspNetCore.Server.IISIntegration.Tools`` package instead of the ``dotnet-publish-iis`` package.
 
 You can use the Publish IIS tool to publish your app with the ``web.config`` file that is required for your target environment. More information about Publish IIS changes is at https://github.com/aspnet/Announcements/issues/164.
 
-IIS integration middleware is now setup using ``WebHostBuilder`` in ``Program.Main``, and is no longer called in the ``Configure`` method of the ``Startup`` class. 
+IIS integration middleware is now setup using ``WebHostBuilder`` in ``Program.Main()``, and is no longer called in the ``Configure()`` method of the ``Startup`` class. 
 
 .. code-block:: c#
 
   public static void Main(string[] args)
   {
-    var host = new WebHostBuilder().UseIISIntegration();
+    var host = new WebHostBuilder().UseIISIntegration().Build();
   }
+  
 
+Web Deploy changes
+^^^^^^^^^^^^^^^^^^^^^^^  
+Delete ``RC1StarterWeb - Web Deploy-publish.ps1``. This is a script generated by VS for web deploy. There is a version for RC1 projects (dnx based) and a different script for RC2 projects (dotnet based) which are incompatible with each other. As such, when migrating to RC2, you need to delete the old script and let VS generate a new one to ensure web deploy works for the converted RC2 project.
+  
+  
+Applicationhost.config
+^^^^^^^^^^^^^^^^^^^^^^
+If ``applicationhost.config`` was created with RC1 or early RC2 it will point to a wrong application folder. The ``applicationhost.config`` file will read ``wwwroot`` as the application folder and this is where IIS will look for ``web.config`` file. However, since the ``web.config`` file now goes in the ``approot``, IIS won't find the file and the user may not be able to start the appliation with IIS.
+  
 
 Json configuration syntax change 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``ConfigurationRoot.ReloadOnChanged`` is no longer available, add is added explicitly via ``ConfigurationBuilder.AddJsonFile``.
+``ConfigurationRoot.ReloadOnChanged()`` is no longer available, add is added explicitly via ``ConfigurationBuilder.AddJsonFile()``.
 
 
 Changes in MVC
@@ -207,6 +231,21 @@ To compile views, set the ``preserveCompilationContext`` option in ``project.jso
 
 
 You no longer need to reference the Tag Helper package ``Microsoft.AspNet.Mvc.TagHelpers``, which was renamed to ``Microsoft.AspNetCore.Mvc.TagHelpers`` in RC2. The package is now referenced by MVC by default.
+
+
+Global.json
+^^^^^^^^^^^
+You must update the sdk version in ``global.json``, as this file is used to configure the solution as a whole.
+
+.. code-block:: c#  
+
+  {
+    "projects": [ "src", "test" ],
+    "sdk": {
+      "version": "1.0.0-rc2-final"
+    }
+  }
+
 
 Changes in views
 ^^^^^^^^^^^^^^^^
@@ -232,10 +271,10 @@ ViewComponents changes
 
 The Sync APIs have been removed.
 
-To reduce ambiguity in ViewComponent method selection, we've modified the selection to only allow exactly one ``Invoke`` or ``InvokeAsync`` per ViewComponent.
-``Component.Render``, ``Component.RenderAsync``, and ``Component.Invoke`` have been removed.
+To reduce ambiguity in ViewComponent method selection, we've modified the selection to only allow exactly one ``Invoke()`` or ``InvokeAsync()`` per ViewComponent.
+``Component.Render()``, ``Component.RenderAsync()``, and ``Component.Invoke()`` have been removed.
 
-``InvokeAsync`` now takes an anonynmous object instead of separate parameters. To use the view component, call @Component.InvokeAsync("Name of view component", <parameters>) from a view. The parameters will be passed to the ``InvokeAsync`` method. The following example demonstrates the ``InvokeAsync`` method call with two parameters:
+``InvokeAsync()`` now takes an anonynmous object instead of separate parameters. To use the view component, call @Component.InvokeAsync("Name of view component", <parameters>) from a view. The parameters will be passed to the ``InvokeAsync()`` method. The following example demonstrates the ``InvokeAsync()`` method call with two parameters:
 
 .. code-block:: c#  
 
@@ -265,18 +304,12 @@ We now consider a type to be a controller if all of the following rules apply:
 - It's important to note that if ``[NonController]`` is applied anywhere in the type hierarchy the discovery conventions will never consider that type or its descendants to be a controller. ``[NonController]`` takes precedence over ``[Controller]``.
 
 
-DNX commands replaced with .NET Core tools
-------------------------------------------
-
-web, user-secrets, sql-cache, watch.
-
-
 Configuration
 -------------
 
-``IConfigurationSource`` has been introduced to represent the settings/configuration which is used to ``Build`` an IConfigurationProvider. It is no longer possible to access the provider instances from IConfigurationBuilder only the sources. This is intentional, but may cause loss of functionality as you can longer do things like explicitly call ``Load`` on the provider instances.
+``IConfigurationSource`` has been introduced to represent the settings/configuration which is used to ``Build()`` an ``IConfigurationProvider``. It is no longer possible to access the provider instances from ``IConfigurationBuilder`` only the sources. This is intentional, but may cause loss of functionality as you can longer do things like explicitly call ``Load`` on the provider instances.
 
-``FileConfigurationProvider`` base class has been introduced as a common root for Json/Xml/Ini providers. This allows the ability to specify an ``IFileProvider`` on the source which will be used to read the file instead of explicitly using ``File.Open``. The side effect of this change is that absolute paths are no longer supported. The file path must be relative to the base path of the ``IConfigurationBuilder``'s basepath or the ``IFileProvider``, if specified.
+``FileConfigurationProvider`` base class has been introduced as a common root for Json/Xml/Ini providers. This allows the ability to specify an ``IFileProvider`` on the source which will be used to read the file instead of explicitly using ``File.Open()``. The side effect of this change is that absolute paths are no longer supported. The file path must be relative to the base path of the ``IConfigurationBuilder``'s basepath or the ``IFileProvider``, if specified.
 
 	   
 Entity Framework Core
@@ -287,7 +320,7 @@ For information on migrating Entity Framework 7 to Entity Framework Core, see th
 Logging
 -------
 
-Logging extensions have been simplified and clarified. ``Verbose`` has been renamed to Trace and has had its severity reduced to below ``Debug``. As a comparison before and after the change, the values of ``LogLevel`` are listed here with the most severe level at the top:
+Logging extensions have been simplified and clarified. ``Verbose`` has been renamed to ``Trace`` and has had its severity reduced to below ``Debug``. As a comparison before and after the change, the values of ``LogLevel`` are listed here with the most severe level at the top:
 
 =============  =============
 Old Levels	   New Levels
@@ -299,6 +332,8 @@ Information    Information
 Verbose        Debug
 Debug          Trace
 =============  =============
+
+``ILoggerFactory`` no longer contains ``AddConsole``.
 
 Visual Studio Templates
 -----------------------
@@ -333,15 +368,14 @@ Identity API updates
 
 The signatures for the following methods have changed:
 
-===========================================  ===========================================
-RC1                                          RC2
-===========================================  ===========================================
-ExternalLoginInfo.ExternalPrincipal          ExternalLoginInfo.Principal.
-User.IsSignedIn()                            SignInManager.IsSignedIn(User).
-await UserManager.FindByIdAsync(
-HttpContext.User.GetUserId())                UserManager.GetUserAsync(HttpContext.User);
-User.GetUserId()                             UserManager.GetUserId(User)
-===========================================  ===========================================
+===============================================================  ===========================================
+RC1                                                              RC2
+===============================================================  ===========================================
+ExternalLoginInfo.ExternalPrincipal()                            ExternalLoginInfo.Principal()
+User.IsSignedIn()                                                SignInManager.IsSignedIn(User)
+await UserManager.FindByIdAsync(HttpContext.User.GetUserId())    UserManager.GetUserAsync(HttpContext.User)
+User.GetUserId()                                                 UserManager.GetUserId(User)
+===============================================================  ===========================================
 
 To use the Identity API in views, add the following directives to the view:
 
