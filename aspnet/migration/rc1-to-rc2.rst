@@ -33,7 +33,7 @@ You no longer need to reference the Tag Helper package ``Microsoft.AspNet.Mvc.Ta
 Creating your web application host
 ----------------------------------
 
-Since ASP.NET Core apps are just console apps, you must define an entry point for your application in ``Program.Main()`` that sets up a web host, then tells it to start listening. Below is an example of the startup code for the built-in `Web Application` template in Visual Studio.
+Since ASP.NET Core apps are just console apps, you must define an entry point for your application in ``Program.Main()`` that sets up a web host. Then tell the host to start listening. Below is an example of the startup code for the built-in `Web Application` template in Visual Studio.
 
 .. code-block:: c#
 
@@ -234,6 +234,7 @@ Json configuration syntax change
 
 Global.json
 ^^^^^^^^^^^
+
 You must update the sdk version in ``global.json``, as this file is used to configure the solution as a whole.
 
 .. code-block:: c#  
