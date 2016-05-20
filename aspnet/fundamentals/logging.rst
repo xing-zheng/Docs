@@ -11,7 +11,6 @@ ASP.NET Core has built-in support for logging, and allows developers to easily l
   :local:
   :depth: 1
 
-
 `View or download sample code <https://github.com/aspnet/Docs/tree/master/aspnet/fundamentals/logging/sample>`__
 
 Implementing Logging in your Application
@@ -25,7 +24,7 @@ Adding logging to a component in your application is done by requesting either a
   :dedent: 8
   :emphasize-lines: 3,14
 
-When a logger is created, a category name must be provided. The category name specifies the source of the logging events. By convention this string is hierarchical, with categories separated by dot (``.``) characters. Some logging providers have filtering support that leverages this convention, making it easier to locate logging output of interest. In the above example, the logging is configured to use the built-in `ConsoleLogger <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/Extensions/Logging/Console/ConsoleLogger/index.html>`_ (see `Configuring Logging in your Application`_ below). To see the console logger in action, run the sample application using the ``web`` command, and make a request to configured URL (``localhost:5000``). You should see output similar to the following:
+When a logger is created, a category name must be provided. The category name specifies the source of the logging events. By convention this string is hierarchical, with categories separated by dot (``.``) characters. Some logging providers have filtering support that leverages this convention, making it easier to locate logging output of interest. In the above example, the logging is configured to use the built-in `ConsoleLogger <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/Extensions/Logging/Console/ConsoleLogger/index.html>`_ (see `Configuring Logging in your Application`_ below). To see the console logger in action, run the sample application using the ``dotnet run`` command, and make a request to configured URL (``localhost:5000``). You should see output similar to the following:
 
 .. image:: logging/_static/console-logger-output.png
 
@@ -60,12 +59,12 @@ Logging Verbosity Levels
 
 When adding logging statements to your application, you must specify a `LogLevel <https://docs.asp.net/projects/api/en/latest/autoapi/Microsoft/Extensions/Logging/LogLevel/index.html>`_. The LogLevel allows you to control the verbosity of the logging output from your application, as well as the ability to pipe different kinds of log messages to different loggers. For example, you may wish to log debug messages to a local file, but log errors to the machine's event log or a database.
 
-ASP.NET Core defines six levels of logging verbosity:
+ASP.NET Core defines six levels of logging verbosity, ordered by increasing importance or severity:
 
-Debug
+Trace
   Used for the most detailed log messages, typically only valuable to a developer debugging an issue. These messages may contain sensitive application data and so should not be enabled in a production environment. *Disabled by default.* Example: ``Credentials: {"User":"someuser", "Password":"P@ssword"}``
 
-Verbose
+Debug
   These messages have short-term usefulness during development. They contain information that may be useful for debugging, but have no long-term value. This is the default most verbose level of logging. Example: ``Entering method Configure with flag set to true``
 
 Information
@@ -109,11 +108,23 @@ In the ``TodoController`` example, event id constants are defined for each event
 
 .. note:: It is recommended that you perform application logging at the level of your application and its APIs, not at the level of the framework. The framework already has logging built in which can be enabled simply by setting the appropriate logging verbosity level.
 
-To see more detailed logging at the framework level, you can adjust the `LogLevel` specified to your logging provider to something more verbose (like `Debug` or `Verbose`). For example, if modify the `AddConsole` call in the `Configure` method to use `LogLevel.Verbose` and run the application, the result shows much framework-level detail about the request:
+To see more detailed logging at the framework level, you can adjust the `LogLevel` specified to your logging provider to something more verbose (like `Debug` or `Trace`). For example, if you modify the `AddConsole` call in the `Configure` method to use `LogLevel.Trace` and run the application, the result shows much more framework-level detail about each request:
 
-.. image:: logging/_static/console-logger-verbose-output.png
+.. image:: logging/_static/console-logger-trace-output.png 
 
-The console logger prefixes verbose output with "verbose: " and uses a gray font to make it easier to distinguish it from other levels of log output.
+The console logger prefixes debug output with "dbug: "; there is no trace level debugging enabled by the framework by default. Each log level has a corresponding four character prefix that is used, so that log messages are consistently aligned.
+
+=============  =============
+Log Level	   Prefix
+=============  =============
+Critical       crit
+Error          fail
+Warning        warn
+Information    info
+Debug          dbug
+Trace          trce
+=============  =============
+
 
 Scopes
 ^^^^^^
@@ -125,9 +136,12 @@ Scopes are not required, and should be used sparingly, if at all. They're best u
 Configuring Logging in your Application
 ----------------------------------------
 
-To configure logging in your ASP.NET application, you should resolve ``ILoggerFactory`` in the ``Configure`` method in your ``Startup`` class. ASP.NET will automatically provide an instance of ``ILoggerFactory`` using :doc:`dependency-injection` when you add a parameter of this type to the ``Configure`` method. Once you've added ``ILoggerFactory`` as a parameter, you configure loggers within the ``Configure`` method by calling methods (or extension methods) on the logger factory. We have already seen an example of this configuration at the beginning of this article, when we added console logging by simply calling ``loggerFactory.AddConsole``. In addition to adding loggers, you can also control the verbosity of the application's logging by setting the ``MinimumLevel`` property on the logger factory. The default verbosity is ``Verbose``.
+To configure logging in your ASP.NET application, you should resolve ``ILoggerFactory`` in the ``Configure`` method in your ``Startup`` class. ASP.NET will automatically provide an instance of ``ILoggerFactory`` using :doc:`dependency-injection` when you add a parameter of this type to the ``Configure`` method. Once you've added ``ILoggerFactory`` as a parameter, you configure loggers within the ``Configure`` method by calling methods (or extension methods) on the logger factory. We have already seen an example of this configuration at the beginning of this article, when we added console logging by simply calling ``loggerFactory.AddConsole``.
 
-.. note:: You can specify the minimum logging level each logger provider will use as well. For example, the ``AddConsole`` extension method supports an optional parameter for setting its minimum ``LogLevel``.
+.. note:: You specify the minimum logging level each logger provider will use when you configure it. For example, the ``AddConsole`` extension method supports an optional parameter for setting its minimum ``LogLevel``.
+
+In addition to setting the minimum logging level, you can also specify that...
+.. TODO: cover the different overloads of AddConsole().
 
 Configuring TraceSource Logging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
